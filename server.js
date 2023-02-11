@@ -175,14 +175,14 @@ catch (error) {
 }
 
 
-function printfile()
-{
+function printfile() {
     var font_variable = { x: '50', y: '50', fonttype: '3', rotation: '0', xmul: '1', ymul: '1', text: 'Font Test' }
     var windowsfont_variable = { x: 50, y: 250, fontheight: 64, rotation: 0, fontstyle: 0, fontunderline: 0, szFaceName: 'Arial', content: 'Windowsfont Test' }
     var barcode_variable = { x: '50', y: '100', type: '128', height: '70', readable: '0', rotation: '0', narrow: '3', wide: '1', code: '123456' }
     var label_variable = { quantity: '1', copy: '1' };
 
-    openport('TSC TE210', true);
+    // ! 打点打印机TSC的名称
+    openport('TSC TE244', true);
 
     clearbuffer('', true);
     printerfont(font_variable, true);
@@ -195,7 +195,7 @@ function printfile()
 
     //var selftest_command = 'SELFTEST\r\n';
     //var arr = [];
-    //for (var i = 0; i < selftest_command.length; ++i) 
+    //for (var i = 0; i < selftest_command.length; ++i)
     //    arr.push(selftest_command.charCodeAt(i));
     //var selftest_command_buffer = new Uint8Array(arr);
     //sendcommand_binary(selftest_command_buffer, true);
