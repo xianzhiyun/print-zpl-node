@@ -177,20 +177,19 @@ catch (error) {
 
 function printfile() {
     var font_variable = { x: '50', y: '50', fonttype: '3', rotation: '0', xmul: '1', ymul: '1', text: 'Font Test' }
-    var windowsfont_variable = { x: 50, y: 250, fontheight: 64, rotation: 0, fontstyle: 0, fontunderline: 0, szFaceName: 'Arial', content: 'Windowsfont Test' }
+    var windowsfont_variable = { x: 50, y: 200, fontheight: 64, rotation: 0, fontstyle: 0, fontunderline: 0, szFaceName: 'Arial', content: 'Windows中' }
     var barcode_variable = { x: '50', y: '100', type: '128', height: '70', readable: '0', rotation: '0', narrow: '3', wide: '1', code: '123456' }
     var label_variable = { quantity: '1', copy: '1' };
 
-    // ! 打点打印机TSC的名称
-    openport('TSC TE244', true);
+    openport('TSC TE244', true);  // ! 打点打印机TSC的名称
 
     clearbuffer('', true);
-    printerfont(font_variable, true);
+    printerfont(font_variable, true);   // 不支持中文
     barcode(barcode_variable, true);
-    windowsfont(windowsfont_variable, true);
+    windowsfont(windowsfont_variable, true);  // 支持中文
     sendcommand('CODEPAGE UTF-8', true);
-    sendcommand('TEXT 250,50,\"0\",0,10,10,\"Text Test!!\"', true);
-    sendcommand_utf8('TEXT 50,200,\"KAIU.TTF\",0,10,10,\"測試中文Text Test!!\"', true);
+    sendcommand('TEXT 250,50,\"0\",0,10,10,\"Text Test!!\"', true); // 不支持中
+    sendcommand_utf8('TEXT 50,150,\"KAIU.TTF\",0,10,10,\"Text-1!!\"', true);  // 需要字体库支持
     printlabel(label_variable, true);
 
     //var selftest_command = 'SELFTEST\r\n';
