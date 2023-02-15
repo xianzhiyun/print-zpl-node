@@ -45,18 +45,6 @@ app.post('/', urlencodedParser,function (req, res) {
     res.redirect(req.get('referer'));
 });
 
-app.post('/128B', urlencodedParser,function (req, res) {
-    printfile128B();
-    res.redirect(req.get('referer'));
-});
-app.post('/128M', urlencodedParser,function (req, res) {
-    printfile128M();
-    res.redirect(req.get('referer'));
-});
-app.post('/128MB', urlencodedParser,function (req, res) {
-    printfile128MB();
-    res.redirect(req.get('referer'));
-});
 
 try {
     openport = edge.func({
@@ -187,73 +175,30 @@ catch (error) {
 }
 
 
-function printfile() {
+function printfile()
+{
+    var font_variable = { x: '50', y: '50', fonttype: '3', rotation: '0', xmul: '1', ymul: '1', text: 'Font Test' }
+    var windowsfont_variable = { x: 50, y: 250, fontheight: 64, rotation: 0, fontstyle: 0, fontunderline: 0, szFaceName: 'Arial', content: 'Windowsfont Test' }
+    var barcode_variable = { x: '50', y: '100', type: '128', height: '70', readable: '0', rotation: '0', narrow: '3', wide: '1', code: '123456' }
     var label_variable = { quantity: '1', copy: '1' };
-    openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-    // 30个字符打印效果
+
+    openport('TSC TE210', true);
+
     clearbuffer('', true);
-    [
-        'CP-WSRMK', // 8个
-        'CP-WSRMK-CP-0', // 13个
-        'CP-WSRMK-8000A0095512312311111', // 30位
-        '012312312312312312310123123123'
-    ].forEach((item, index) => {
-        if(item.length <= 8){
-            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,3,3,"${item}"`, true)
-        }else if(item.length >= 8 && item.length <=14){
-            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,2,2,"${item}"`, true)
-        }else{
-            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,1,1,"${item}"`, true)
-        }
-    })
+    printerfont(font_variable, true);
+    barcode(barcode_variable, true);
+    windowsfont(windowsfont_variable, true);
+    sendcommand('CODEPAGE UTF-8', true);
+    sendcommand('TEXT 250,50,\"0\",0,10,10,\"Text Test!!\"', true);
+    sendcommand_utf8('TEXT 50,200,\"KAIU.TTF\",0,10,10,\"測試中文Text Test!!\"', true);
     printlabel(label_variable, true);
-    closeport('', true);
-}
-function printfile128B() {
-    // 个字符打印效果
-    var label_variable = { quantity: '1', copy: '1' };
-    openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-    clearbuffer('', true);
-    [
-        'CP-WSRMK',
-        'CP-WSRMK-',
-        'CP-WSRMK-80',
-        'CP-WSRMK-800',
-    ].forEach((item, index) => {
-        sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,3,3,"${item}"`, true)
-    })
-    printlabel(label_variable, true);
-    closeport('', true);
-}
-function printfile128M() {
-    var label_variable = { quantity: '1', copy: '1' };
-    openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-    clearbuffer('', true);
-    [
-        '0123456789123456789',
-        'ASCDEFGHIJKLMNOPQRS',
-        'abcdefghijklmnopqrstuvwxyz',
-        'A-B-C-DHIJKLMNOPQRS',
-    ].forEach((item, index) => {
-        // sendcommand(`BARCODE 20,${index * 80},"128",74, 0,0,3,3,"${item}"`, true)
-        sendcommand(`BARCODE 20,${index * 80},"128B",74, 0,0,3,3,"${item}"`, true)
-    })
-    printlabel(label_variable, true);
-    closeport('', true);
-}
-function printfile128MB() {
-    var label_variable = { quantity: '1', copy: '1' };
-    openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-    clearbuffer('', true);
-    [
-        '0123456789123456789',
-        'ASCDEFGHIJKLMNOPQRS',
-        'abcdefghijklmnopqrstuvwxyz',
-        'A-B-C-DHIJKLMNOPQRS',
-    ].forEach((item, index) => {
-        // sendcommand(`BARCODE 20,${index * 80},"128",74, 0,0,1,2,"${item}"`, true)
-        sendcommand(`BARCODE 20,${index * 80},"128M",74, 0,0,1,3,"${item}"`, true)
-    })
-    printlabel(label_variable, true);
+
+    //var selftest_command = 'SELFTEST\r\n';
+    //var arr = [];
+    //for (var i = 0; i < selftest_command.length; ++i)
+    //    arr.push(selftest_command.charCodeAt(i));
+    //var selftest_command_buffer = new Uint8Array(arr);
+    //sendcommand_binary(selftest_command_buffer, true);
+
     closeport('', true);
 }
