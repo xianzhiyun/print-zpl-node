@@ -19,7 +19,6 @@ var closeport;
 var sendcommand_utf8;
 var sendcommand_binary;
 var windowsfont;
-var usbprintername
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(bodyParser.urlencoded({
@@ -191,68 +190,42 @@ catch (error) {
 function printfile() {
     var label_variable = { quantity: '1', copy: '1' };
     openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-    sendcommand(`TEXT 10,20,"0",0,12,12,"111111"`, true);
+    // 30个字符打印效果
+    clearbuffer('', true);
+    [
+        'CP-WSRMK', // 8个
+        'CP-WSRMK-CP-0', // 13个
+        'CP-WSRMK-8000A0095512312311111', // 30位
+        '012312312312312312310123123123'
+    ].forEach((item, index) => {
+        if(item.length <= 8){
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,3,3,"${item}"`, true)
+        }else if(item.length >= 8 && item.length <=14){
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,2,2,"${item}"`, true)
+        }else{
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,1,1,"${item}"`, true)
+        }
+    })
     printlabel(label_variable, true);
     closeport('', true);
 }
 function printfile128B() {
-    let width = 433.154 + 3
     var label_variable = { quantity: '1', copy: '1' };
     openport('TSC TE244', true);  // ! 打点打印机TSC的名称
-
-    let alignment = 1
     // 30个字符打印效果
-    // OUT “DPI = “;GETSETTING$(“SYSTEM”,”INFORMATION”,”DPI”)
     clearbuffer('', true);
-    let str = "hello world2"
-    let str2 = "w"
-    let fontsize = '14'
-    let arr = [
-        `dot$="8"`,
-        `str$="${str}"`,
-        `str1$="${str2}"`,
-        `font$="0"`,
-        `fontsize=${fontsize}`,
-        `DPI$=GETSETTING$("SYSTEM","INFORMATION","DPI")`,  // 字符串内容
-        `F=100`,
-        `G=2`,
-        `H=F*G`,
-        `I$=STR$(H)`,
-        `DPI2=VAL(DPI$)`,
-        // `IF DPI$+0=203 THEN dot$="11.8"`,
-        `strWidth=TEXTPIXEL(str1$,font$,fontsize)`,
-        // `TEXT 10,40,font$,0,fontsize,fontsize,str$`
-        `TEXT 10,50,\"0\",0,fontsize,fontsize,\"444444444444444\"`,
-        // `TEXT 10,203,\"0\",0,12,12,str$`,
-
-        // `TEXT 50,DPI2,"0",0,12,12,"22222"`,
-        // `TEXT 50,150,"0",0,12,12,I$`
-
-        // `TEXT 10,DPI$,\"0\",0,12,12,str$`,
-        // `TEXT 10,DPI2$,\"0\",0,12,12,str1$`,
-
-        // GETSETTING$ 获取内容位字符串内容
-        // `TEXT 50,200,\"0\",0,12,12,DPI2$`,
-
-        // GETSETTING$ 获取内容位字符串内容
-        `TEXT 50,200,\"0\",0,12,12,DPI$`,
-
-
-        // 运算符号计算
-        /*
-        `TEXT 50,50,"0",0,12,12,F$`,
-        `TEXT 50,80,"0",0,12,12,G$`,
-        `TEXT 50,100,"0",0,12,12,H`,
-        `TEXT 50,150,"0",0,12,12,I$`,
-        */
-
-
-        // `TEXT 10,140,\"0\",0,12,12,dot$`,
-        // `TEXT 10,140,\"0\",0,12,12,DPI2$`,
-
-    ]
-    arr.forEach((item, index) => {
-        sendcommand(item, true);
+    [
+        'CP-WSRMK-8', // 10个
+        'CP-WSRMK-8002222', // 16个
+        'CP-WSRMK-8000A0095512312311111123123', // 36个
+    ].forEach((item, index) => {
+        if(item.length <= 10){
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,3,3,"${item}"`, true)
+        }else if(item.length >= 10 && item.length <=16){
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,2,2,"${item}"`, true)
+        }else{
+            sendcommand(`BARCODE 0,${index * 80},"128M",74, 0,0,1,1,"${item}"`, true)
+        }
     })
     printlabel(label_variable, true);
     closeport('', true);
