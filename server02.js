@@ -182,15 +182,15 @@ function printfile()
     var barcode_variable = { x: '50', y: '100', type: '128', height: '70', readable: '0', rotation: '0', narrow: '3', wide: '1', code: '123456' }
     var label_variable = { quantity: '1', copy: '1' };
 
-    openport('TSC TE210', true);
+    openport('TSC TE244', true);
 
     clearbuffer('', true);
-    printerfont(font_variable, true);
-    barcode(barcode_variable, true);
-    windowsfont(windowsfont_variable, true);
-    sendcommand('CODEPAGE UTF-8', true);
-    sendcommand('TEXT 250,50,\"0\",0,10,10,\"Text Test!!\"', true);
-    sendcommand_utf8('TEXT 50,200,\"KAIU.TTF\",0,10,10,\"測試中文Text Test!!\"', true);
+    // printerfont(font_variable, true);
+    // barcode(barcode_variable, true);
+    // windowsfont(windowsfont_variable, true);
+    // sendcommand('CODEPAGE UTF-8', true);
+    // sendcommand('TEXT 250,50,\"0\",0,10,10,\"Text Test!!\"', true);
+    sendcommand('TEXT 50,50,\"ARIAL.TTF\",0,12,12,\"Text222 Test!!\"', true);
     printlabel(label_variable, true);
 
     //var selftest_command = 'SELFTEST\r\n';
