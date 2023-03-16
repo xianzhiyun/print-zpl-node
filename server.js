@@ -45,6 +45,12 @@ app.post('/', urlencodedParser, function (req, res) {
 });
 
 
+app.post('/128B', urlencodedParser, function (req, res) {
+    printfile128B();
+    res.redirect(req.get('referer'));
+});
+
+
 try {
     openport = edge.func({
         assemblyFile: 'tsclibnet.dll',
@@ -190,16 +196,45 @@ function printfile() {
     openport('TSC TE244', true);
 
     clearbuffer('', true);
-    sendcommand(`TEXT 0,0,"0",0,12,12,"1234567890-0"`, true);
-    sendcommand(`TEXT 0,40,"0",0,12，12，"1234567890-1"`, true);
-    sendcommand(`TEXT 0,80,"0",0,12，12，"1234567890-2"`, true);
-    sendcommand(`TEXT 0,120,"0",0,12，12，"1234567890-3"`, true);
-    sendcommand(`TEXT 0,270,"0",0,12，12，"1234567890-4"`, true);
-    sendcommand(`TEXT 0,180,"0",0,12，12，"1234567890-4"`, true);
-    sendcommand(`TEXT 0,200,"0",0,12，12，"1234567890-5"`, true);
-    sendcommand(`TEXT 100,250,"0",0,12，12，"1234567890-6"`, true);
-    sendcommand(`TEXT 0,280,"0",0,12，12，"1234567890-6.1"`, true);
-    sendcommand(`TEXT 0,290,"0",0,12，12，"1234567890-6.2"`, true);
+ /*   sendcommand(`TEXT 0,0,"0",0,12,12,"1234567890-0"`, true);
+    sendcommand(`TEXT 0,40,"0",0,12,12,"1234567890-1"`, true);
+    sendcommand(`TEXT 0,80,"0",0,12,12,"1234567890-2"`, true);
+    sendcommand(`TEXT 0,120,"0",0,12,12,"1234567890-3"`, true);
+    sendcommand(`TEXT 0,270,"0",0,12,12,"1234567890-4"`, true);
+    sendcommand(`TEXT 0,180,"0",0,12,12,"1234567890-4"`, true);
+    sendcommand(`TEXT 0,200,"0",0,12,12,"1234567890-5"`, true);
+    // sendcommand(`TEXT 100,250,"0",0,12,12,"1234567890-6"`, true);
+    // sendcommand(`TEXT 0,280,"0",0,12,12,"1234567890-6.1"`, true);
+    sendcommand(`TEXT 0,290,"0",0,12,12,"1234567890-6.2"`, true);*/
+
+    // sendcommand(`BARCODE 20,10,"128M",70,1,0,2,2,"CP-OXL-0232A00858"`, true);
+
+    // sendcommand(`TEXT 0,0,"0",0,12,12,"1-1 0 M"`, true);
+    // sendcommand(`BARCODE 100,50,"128",70,1,0,1,1,"CP-OXL-0208-CP-CP"`, true);
+    // sendcommand(`BARCODE 50,150,"128M",70,0,0,2,2,"CP-OXL-0232A00858"`, true);
+    // sendcommand(`BARCODE 100,150,"128M",70,1,0,1,1,"CP-OXL-0208-CP-CP"`, true);
+
+    sendcommand(`BARCODE 5,10,"128",50,1,0,2,2,"230307000161"`, true);
+    sendcommand(`BARCODE 5,100,"128",50,1,0,2,2,"230307000161"`, true);
+    sendcommand(`BARCODE 5,190,"128",50,1,0,3,3,"230307000161"`, true);
+    sendcommand(`BARCODE 5,250,"128",50,1,0,4,4,"230307000161"`, true);
+
+    // sendcommand(`BARCODE 5,50,"128M",50,1,0,2,2,"230307000162"`, true);
+    // sendcommand(`BARCODE 5,150,"128M",50,1,0,3,3,"230307000162"`, true);
+
+    // sendcommand(`BARCODE 5,50,"EAN128",50,1,0,2,2,"230307000163"`, true);
+    // sendcommand(`BARCODE 5,150,"EAN128",50,1,0,3,3,"230307000163"`, true);
+
+    // sendcommand(`BARCODE 5,50,"93",50,1,0,2,2,"230307000163"`, true);
+    // sendcommand(`BARCODE 5,150,"93",50,1,0,3,3,"230307000163"`, true);
+
+
+    /*sendcommand(`TEXT 0,0,"0",0,12,12,"2-2 0 M"`, true);
+    sendcommand(`BARCODE 20,10,"128",70,1,0,2,2,"CP-OXL-0232A008581"`, true);
+    // sendcommand(`BARCODE 50,150,"128M",70,0,0,2,2,"CP-OXL-0232A00858"`, true);
+    sendcommand(`BARCODE 20,150,"128M",70,1,0,2,2,"210-000-2A00858M1"`, true);*/
+
+
     printlabel(label_variable, true);
 
     //var selftest_command = 'SELFTEST\r\n';
@@ -209,5 +244,43 @@ function printfile() {
     //var selftest_command_buffer = new Uint8Array(arr);
     //sendcommand_binary(selftest_command_buffer, true);
 
+    closeport('', true);
+}
+
+function printfile128B() {
+    var font_variable = {x: '50', y: '50', fonttype: '3', rotation: '0', xmul: '1', ymul: '1', text: 'Font Test'}
+    var windowsfont_variable = {
+        x: 20,
+        y: 100,
+        fontheight: 64,
+        rotation: 0,
+        fontstyle: 3,
+        fontunderline: 0,
+        szFaceName: 'Arial',
+        content: '达摩克利斯之剑'
+    }
+    var barcode_variable = {
+        x: '50',
+        y: '100',
+        type: '128',
+        height: '70',
+        readable: '0',
+        rotation: '0',
+        narrow: '3',
+        wide: '1',
+        code: '123456'
+    }
+    var label_variable = {quantity: '1', copy: '1'};
+
+    openport('TSC TE244', true);
+    clearbuffer('', true);
+    windowsfont(windowsfont_variable, true);
+    // sendcommand(`SIZE 1.07, 1.07`, true);
+    // sendcommand(`SIZE 2.33, 1.54`, true);
+    // sendcommand(`BOX 0, 0, 480, 320, 10`, true);
+    // sendcommand(`BOX 0, 0, 480, 320, 20`, true);
+    // sendcommand(`TEXT 80,80,"0",0,12,12,""`, true);
+    // sendcommand(`TEXT 80,450,"0",0,12,12,"test edit"`, true);
+    printlabel(label_variable, true);
     closeport('', true);
 }
